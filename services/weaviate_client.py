@@ -76,7 +76,7 @@ def insert_chunk(chunk, vector, filename):
         vector=vector
     )
 
-    return result.uuid
+    return result
 
 def query_weaviate(query: str, limit: int = 3):
     """

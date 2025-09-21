@@ -15,6 +15,7 @@ class Bookings(Base):
     name = Column(String, nullable=False)
     date = Column(String, nullable=False)
     time = Column(String, nullable=False)
+    email = Column(String, nullable=False)
 
 class MetaData(Base):
     __tablename__ = "MetaData"

@@ -103,19 +103,22 @@ def detect_booking(query: str) -> Optional[Booking]:
     name_match = re.search(r'with\s+([A-Za-z ]+?)\s+at', query)
     name = name_match.group(1).strip() if name_match else None
 
-    time_match = re.search(r'at\s+([0-9apm: ]+)\s+on', query)
-    time = time_match.group(1).strip() if time_match else None
+    email_match = re.search(r'[\w\.-]+@[\w\.-]+\.\w+', query)
+    email = email_match.group(0) if email_match else None
 
     date_match = re.search(r'on\s+([0-9a-zA-Z ]+)', query)
     date = date_match.group(1).strip() if date_match else None
 
-    print(name_match, date_match, time_match)
+    time_match = re.search(r'at\s+([0-9apm: ]+)\s+on', query)
+    time = time_match.group(1).strip() if time_match else None
+  
 
     if name and time and date:
         return {
             "name": name,
-            "time": time,
+            "email": email,
             "date": date,
+            "time": time
         }
     return None
 
@@ -140,13 +143,14 @@ def generate_booking_response(
         
         Booking details:
         - Name: {booking["name"]}
+        - Email: {booking["email"]}
         - Date: {booking["date"]}
         - Time: {booking["time"]}
         
-        Generate a friendly confirmation message starting with "Thank you for requesting an interview with us! 
-        We've confirmed your appointment with {booking['name']} for {booking['time']} on {booking['date']}." Followed by "If you have 
-        any questions or need any further assistance, please don't hesitate to reach out." Do not add greetings, 
-        quotes, signatures, or any other text.
+        Generate a friendly confirmation message starting with "Thank you for requesting an interview with us! We've 
+        confirmed your appointment with {booking['name']} for {booking['time']} on {booking['date']}. A confirmation 
+        has been sent to your email: {booking['email']}." Followed by "If you have any questions or need any further 
+        assistance, please don't hesitate to reach out." Do not add greetings, quotes, signatures, or any other text.
         """
     })
 

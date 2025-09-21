@@ -25,13 +25,11 @@ async def upload_document(
         if not text:
             raise HTTPException(status_code=400, detail="No text extracted from file")
         
-        chunks = chunking_strategies.get(chunk_strategy)
-
+        chunks = chunking_strategies.get(chunk_strategy)(text)
         vectors = embedder(chunks=chunks)
-
         for chunk, vec in zip(chunks, vectors):
             chunk_length = len(chunk)
-            weaviate_id = insert_chunk(chunk, vec, file.filename)
+            weaviate_id = str(insert_chunk(chunk, vec, file.filename))
             saveMetaData(file.filename, chunk_strategy, weaviate_id, chunk_length=chunk_length)
         return {"status": "sucess", "chunk_stored": chunk_length}
 
